@@ -8,5 +8,22 @@ Hint - use Date class exposed in JS
 */
 
 function calculateTime(n) {
-    return 0.01;
+
+    // Boilerplate for time calc
+    const startTime = new Date();
+
+    // Calc Sum code snippet
+    s = 0
+    for (var i=1; i<=n; ++i) {
+        s += i;
+    }
+
+    // Boilerplate for time calc
+    const endTime = new Date();
+    timeDiff = endTime - startTime;
+
+    return timeDiff;
 }
+
+res = calculateTime(100000000);
+console.log('Time Taken: ' + res.toString() + 'ms');

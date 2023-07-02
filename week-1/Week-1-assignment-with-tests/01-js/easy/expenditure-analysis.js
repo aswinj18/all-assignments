@@ -9,7 +9,31 @@
 */
 
 function calculateTotalSpentByCategory(transactions) {
-  return [];
+
+  // Object that saves categories as keys and price as value
+  var totalSpendByCat = {};
+
+  // Looping through all transactions
+  for (const idvTrans of transactions) {
+    // Summing up prices for each category
+    const category = idvTrans['category']
+    if (category in totalSpendByCat) {
+      totalSpendByCat[category] += idvTrans['price'];
+    } else {
+      totalSpendByCat[category] = idvTrans['price'];
+    }
+  }
+
+  // Converting result from {cat: prince, cat: price ...} to [{'category': cat, 'totalSpent':price}, ...]
+  res = []
+  for (let key in totalSpendByCat) {
+    res.push({
+      'category': key,
+      'totalSpent': totalSpendByCat[key]
+    })
+  }
+
+  return res;
 }
 
 module.exports = calculateTotalSpentByCategory;

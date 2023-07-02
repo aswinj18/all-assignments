@@ -4,5 +4,10 @@
  */
 
 function sleep (seconds) {
-
+    startTime = performance.now();
+    while(performance.now() - startTime < seconds*1000) {}
 }
+
+console.time('Sleep time');
+sleep(10);
+console.timeEnd('Sleep time');
