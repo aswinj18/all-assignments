@@ -41,9 +41,11 @@
  */
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 
+app.use(cors());
 app.use(bodyParser.json());
 
 // Datastructure storing data
@@ -69,6 +71,7 @@ app.get('/todos', (req, res) => {
 // Response: 200 OK with the todo item in JSON format if found, or 404 Not Found if not found.
 // Example: GET http://localhost:3000/todos/123
 app.get('/todos/:id', (req, res) => {
+  const temp = req.params.id;
   if (id in todoData) {
     const specificToDo = todoData[id];
     const responseBody = {
@@ -90,7 +93,7 @@ app.get('/todos/:id', (req, res) => {
 app.post('/todos', (req, res) => {
   var incomingData = req.body;
 
-  id = nxtIdx;
+  const id = nxtIdx;
   nxtIdx += 1;
 
   todoData[id] = incomingData;
@@ -108,6 +111,7 @@ app.post('/todos', (req, res) => {
 // Example: PUT http://localhost:3000/todos/123
 // Request Body: { "title": "Buy groceries", "completed": true }
 app.put('/todos/:id', (req, res) => {
+  const id = req.params.id;
   const incomingData = req.body;
   todoData[id] = incomingData;
   res.status(200).send();
@@ -118,8 +122,13 @@ app.put('/todos/:id', (req, res) => {
 // Response: 200 OK if the todo item was found and deleted, or 404 Not Found if not found.
 // Example: DELETE http://localhost:3000/todos/123
 app.delete('/todos/:id', (req, res) => {
+  const id = req.params.id;
   delete todoData[id];
   res.status(200).send();
 })
 
-module.exports = app;
+// module.exports = app;
+
+app.listen(3000, () => {
+  console.log('Server is listening on port 3000');
+});
