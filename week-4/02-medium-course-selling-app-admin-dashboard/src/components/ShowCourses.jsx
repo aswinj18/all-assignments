@@ -1,19 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 
 function ShowCourses() {
-    const [courses, setCourses] = React.useState([]);
+    console.log('Inside ShowCourses');
 
-    // Add code to fetch courses from the server
-    // and set it in the courses state variable.
+    const [courses, setCourses] = React.useState([]);
+    const jwtToken = sessionStorage.getItem('admin-session-key');
+
+    console.log(jwtToken)
+
+    useEffect(() => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + jwtToken
+            }
+        }
+
+        axios.get('http://localhost:3000/admin/courses', config)
+        .then(response => response.data)
+        .then(requestData => setCourses(requestData));
+    }, [])
+
     return <div>
-        <h1>Create Course Page</h1>
-        {courses.map(c => <Course title={c.title} />)}
+        <div style={{textAlign:"right"}}>
+            <a href='/about'>Create Course</a>
+        </div>
+        <h1>Courses Present</h1>
+        {courses.map((course, index) => <Course key={index} title={course.title} id={course._id} />)}
     </div>
 }
 
 function Course(props) {
     return <div>
-        <h1>{props.title}</h1>
+        <h3>{props.title} | | | <a href={`course/${props.id}`}>Show Details</a></h3>
     </div>
 }
 

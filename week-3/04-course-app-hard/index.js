@@ -1,9 +1,11 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 // Defining Schemas
 const adminsSchema = new mongoose.Schema({
@@ -118,7 +120,7 @@ app.post('/admin/login', async (req, res) => {
     res.json(responseBody);
 
   } else {
-    res.status(403).json({message: 'Admin already exists'});
+    res.status(403).json({message: 'Wrong Admin Credentials'});
   }
 });
 
@@ -176,6 +178,7 @@ app.use((req, res, next) => {
 
     if (err) {
       res.status(401).json({ message: 'Invalid Authorization Token!' });
+      return;
     }
     
     req.username = decoded.username;
@@ -243,6 +246,19 @@ app.get('/admin/courses', async (req, res) => {
 
   const responseBody = await courses.find({});
   res.json(responseBody);
+
+});
+
+app.get('/admin/courses/:id', async (req, res) => {
+
+  const incomingId = req.params.id;
+  const responseBody = await courses.findOne({_id: incomingId});
+  if (responseBody) {
+    res.json(responseBody);
+  } else {
+    res.status(404).send();
+  }
+  
 
 });
 
